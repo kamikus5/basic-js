@@ -1,13 +1,43 @@
 const CustomError = require("../extensions/custom-error");
 
 class VigenereCipheringMachine {
-  encrypt() {
-    throw new CustomError('Not implemented');
-    // remove line with error and write your code here
+  constructor(machine = 'true') {
+    this.machine = machine;
+  }
+  
+  encrypt(message, key) {
+    let lenMessage = message.length;
+    const lenKey = key.length;
+    let res = '';
+    let i = 0; 
+    let j = 0;
+    while (lenMessage--) {
+      if (!/[a-zA-Z]/.test(message[i])) {
+        res += message[i];
+        ++j;
+      } else {
+      res += String.fromCharCode((message[i].toUpperCase().charCodeAt() + key[(i - j) % lenKey].toUpperCase().charCodeAt() - 130) % 26 + 65);
+      }
+      ++i;
+    }
+    return this.machine ? res : res.split('').reverse().join('');
   }    
-  decrypt() {
-    throw new CustomError('Not implemented');
-    // remove line with error and write your code here
+  decrypt(message, key) {
+    let lenMessage = message.length;
+    const lenKey = key.length;
+    let res = '';
+    let i = 0; 
+    let j = 0;
+    while (lenMessage--) {
+      if (!/[a-zA-Z]/.test(message[i])) {
+        res += message[i];
+        ++j;
+      } else {
+      res += String.fromCharCode(((message[i].toUpperCase().charCodeAt() - key[(i - j) % lenKey].toUpperCase().charCodeAt()) + 26) % 26 + 65);
+      }
+      ++i;
+    }
+    return this.machine ? res : res.split('').reverse().join('');
   }
 }
 
